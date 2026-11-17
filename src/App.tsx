@@ -34,7 +34,6 @@ import { HierarchyWorkspace } from './components/workspaces/HierarchyWorkspace';
 import { JournalRiskWorkspace } from './components/workspaces/JournalRiskWorkspace';
 import { LogPerformanceWorkspace } from './components/workspaces/LogPerformanceWorkspace';
 import { AccountsRiskWorkspace } from './components/workspaces/AccountsRiskWorkspace';
-import { MobileBottomNav } from './components/MobileBottomNav';
 import { Database, ShieldCheck } from 'lucide-react';
 
 const CockpitMainContent: React.FC = () => {
@@ -63,7 +62,7 @@ const CockpitMainContent: React.FC = () => {
       />
 
       {/* Main Viewport Container */}
-      <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 py-6 sm:py-8 pb-24 sm:pb-8">
+      <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 py-6 sm:py-8">
         {/* Dedicated Print Report Header (Exclusively visible when generating PDF) */}
         <PrintReportHeader />
 
@@ -129,7 +128,7 @@ const CockpitMainContent: React.FC = () => {
       </main>
 
       {/* Clean Architectural Footer */}
-      <footer className="border-t border-slate-200 dark:border-slate-800/80 py-8 px-4 sm:px-6 pb-24 sm:pb-8 text-xs text-slate-500 bg-[#faf9f6] dark:bg-[#0c101a] print:hidden">
+      <footer className="border-t border-slate-200 dark:border-slate-800/80 py-8 px-4 sm:px-6 text-xs text-slate-500 bg-[#faf9f6] dark:bg-[#0c101a] print:hidden">
         <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4 text-center sm:text-left">
           <div className="flex items-center gap-2.5">
             <span className="font-extrabold text-slate-900 dark:text-white uppercase font-sans tracking-tight">
@@ -151,9 +150,6 @@ const CockpitMainContent: React.FC = () => {
           </div>
         </div>
       </footer>
-
-      {/* Mobile Bottom Navigation Bar (Today | Plan | Rules | Growth | Journal) */}
-      <MobileBottomNav />
 
       {/* Data Backup & Restore Modal */}
       <DataBackupModal
