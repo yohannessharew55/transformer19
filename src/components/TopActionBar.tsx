@@ -40,7 +40,8 @@ import {
   Check,
   BookOpen,
   Clock,
-  Power
+  Power,
+  Smartphone
 } from 'lucide-react';
 
 const SIX_MASTER_RULES_MINIMAL = [
@@ -103,9 +104,14 @@ const SIX_MASTER_RULES_MINIMAL = [
 interface TopActionBarProps {
   onOpenBackupModal: () => void;
   onOpenPlanCsvModal?: () => void;
+  onToggleMobileMode?: () => void;
 }
 
-export const TopActionBar: React.FC<TopActionBarProps> = ({ onOpenBackupModal, onOpenPlanCsvModal }) => {
+export const TopActionBar: React.FC<TopActionBarProps> = ({
+  onOpenBackupModal,
+  onOpenPlanCsvModal,
+  onToggleMobileMode
+}) => {
   const {
     theme,
     toggleTheme,
@@ -629,6 +635,19 @@ export const TopActionBar: React.FC<TopActionBarProps> = ({ onOpenBackupModal, o
                 <Sun size={15} className="text-amber-500" />
               )}
             </button>
+
+            {/* iPhone iOS 16 Mobile Mode Preview Switcher */}
+            {onToggleMobileMode && (
+              <button
+                type="button"
+                onClick={onToggleMobileMode}
+                className="p-2 rounded-full border border-[#e8e6df] dark:border-[#27354a] bg-white dark:bg-[#162032] text-[#4a5568] dark:text-[#cbd5e0] hover:text-blue-500 dark:hover:text-blue-400 hover:border-blue-500/50 transition-all cursor-pointer shadow-2xs hover:scale-105 active:scale-95 shrink-0 hidden sm:flex items-center justify-center"
+                title="Switch to iPhone iOS 16 Mobile View"
+                aria-label="Switch to iPhone iOS 16 Mobile View"
+              >
+                <Smartphone size={15} className="text-blue-500" />
+              </button>
+            )}
 
             {/* Hamburger Navigation & Command Drawer Button - Always Accessible */}
             <button

@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { CockpitProvider, useCockpit } from './context/CockpitContext';
 import { TopActionBar } from './components/TopActionBar';
 import { HeroBanner } from './components/HeroBanner';
@@ -34,6 +34,7 @@ import { HierarchyWorkspace } from './components/workspaces/HierarchyWorkspace';
 import { JournalRiskWorkspace } from './components/workspaces/JournalRiskWorkspace';
 import { LogPerformanceWorkspace } from './components/workspaces/LogPerformanceWorkspace';
 import { AccountsRiskWorkspace } from './components/workspaces/AccountsRiskWorkspace';
+import { IPhoneCockpit } from './components/mobile/IPhoneCockpit';
 import { Database, ShieldCheck } from 'lucide-react';
 
 const CockpitMainContent: React.FC = () => {
@@ -48,6 +49,48 @@ const CockpitMainContent: React.FC = () => {
   const [isBackupModalOpen, setIsBackupModalOpen] = useState(false);
   const [isPlanCsvModalOpen, setIsPlanCsvModalOpen] = useState(false);
 
+  // iPhone iOS 16 Mobile Detection: Screen < 768px auto, or manual toggle
+  const [isMobileViewport, setIsMobileViewport] = useState<boolean>(() => {
+    if (typeof window !== 'undefined') {
+      return window.innerWidth < 768;
+    }
+    return false;
+  });
+  const [forceDesktopView, setForceDesktopView] = useState<boolean>(false);
+  const [forceMobileView, setForceMobileView] = useState<boolean>(false);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobileViewport(window.innerWidth < 768);
+    };
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  const isMobile = (isMobileViewport && !forceDesktopView) || forceMobileView;
+
+  // Render Dedicated iPhone iOS 16 App View
+  if (isMobile) {
+    return (
+      <div data-theme={theme} className={theme === 'dark' ? 'dark dark-mode' : ''}>
+        <IPhoneCockpit
+          onSwitchToDesktop={() => {
+            setForceDesktopView(true);
+            setForceMobileView(false);
+          }}
+        />
+        <DataBackupModal
+          isOpen={isBackupModalOpen}
+          onClose={() => setIsBackupModalOpen(false)}
+        />
+        <PlanCsvModal
+          isOpen={isPlanCsvModalOpen}
+          onClose={() => setIsPlanCsvModalOpen(false)}
+        />
+      </div>
+    );
+  }
+
   return (
     <div
       data-theme={theme}
@@ -59,6 +102,10 @@ const CockpitMainContent: React.FC = () => {
       <TopActionBar
         onOpenBackupModal={() => setIsBackupModalOpen(true)}
         onOpenPlanCsvModal={() => setIsPlanCsvModalOpen(true)}
+        onToggleMobileMode={() => {
+          setForceMobileView(true);
+          setForceDesktopView(false);
+        }}
       />
 
       {/* Main Viewport Container */}
