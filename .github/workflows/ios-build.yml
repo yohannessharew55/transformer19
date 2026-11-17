@@ -1,0 +1,53 @@
+name: Build iOS App
+
+on:
+  push:
+    branches: [ main, master ]
+  workflow_dispatch:
+
+jobs:
+  build-ios:
+    runs-on: macos-14
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+
+      - name: Install Dependencies
+        run: npm ci
+
+      - name: Build Web Assets & Sync Capacitor iOS
+        run: npm run ios:build
+
+      - name: Build Xcode Project (Simulator / Unsigned Archive)
+        run: |
+          cd ios/App
+          xcodebuild clean build \
+            -project App.xcodeproj \
+            -scheme App \
+            -destination 'generic/platform=iOS' \
+            CODE_SIGNING_ALLOWED=NO \
+            CODE_SIGNING_REQUIRED=NO \
+            CODE_SIGN_IDENTITY="" \
+            -derivedDataPath build
+
+      - name: Package iOS App Payload (.zip / .ipa)
+        run: |
+          mkdir -p build/Payload
+          cp -r ios/App/build/Build/Products/Debug-iphoneos/App.app build/Payload/
+          cd build
+          zip -r Transformer19-iOS.ipa Payload
+          zip -r Transformer19-App.zip Payload/App.app
+
+      - name: Upload iOS Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: Transformer19-iOS-Build
+          path: |
+            build/Transformer19-iOS.ipa
+            build/Transformer19-App.zip

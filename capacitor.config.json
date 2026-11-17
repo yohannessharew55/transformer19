@@ -1,0 +1,24 @@
+{
+  "appId": "com.transformer19.cockpit",
+  "appName": "Transformer19",
+  "webDir": "dist",
+  "plugins": {
+    "SplashScreen": {
+      "launchShowDuration": 1500,
+      "launchAutoHide": true,
+      "backgroundColor": "#0b0f17",
+      "showSpinner": false
+    },
+    "StatusBar": {
+      "style": "DARK",
+      "backgroundColor": "#0b0f17"
+    }
+  },
+  "ios": {
+    "contentInset": "always",
+    "preferredContentMode": "mobile",
+    "scheme": "Transformer19",
+    "backgroundColor": "#0b0f17",
+    "minVersion": "16.0"
+  }
+}

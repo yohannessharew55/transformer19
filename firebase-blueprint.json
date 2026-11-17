@@ -1,0 +1,202 @@
+{
+  "entities": {
+    "DailySession": {
+      "title": "DailySession",
+      "description": "Represents the execution and progress control state for an individual trading day session.",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique session identifier such as w01_d1.",
+          "maxLength": 64
+        },
+        "weekId": {
+          "type": "string",
+          "description": "The parent week ID e.g. w01.",
+          "maxLength": 32
+        },
+        "dayName": {
+          "type": "string",
+          "description": "Day name e.g. Day 1 (Mon).",
+          "maxLength": 64
+        },
+        "protocol": {
+          "type": "string",
+          "description": "Trading setup protocol e.g. London Expansion Setup.",
+          "maxLength": 200
+        },
+        "plannedPnl": {
+          "type": "string",
+          "description": "Planned target P&L e.g. +$25.00.",
+          "maxLength": 32
+        },
+        "plannedEnd": {
+          "type": "string",
+          "description": "Planned balance after session e.g. End: $75.00.",
+          "maxLength": 64
+        },
+        "status": {
+          "type": "string",
+          "description": "Execution progress status.",
+          "enum": ["pending", "completed", "skipped"]
+        },
+        "actualPnl": {
+          "type": "number",
+          "description": "Optional actual realized P&L recorded by trader."
+        },
+        "notes": {
+          "type": "string",
+          "description": "Trader psychology or session review notes.",
+          "maxLength": 2000
+        },
+        "isExtractRow": {
+          "type": "boolean",
+          "description": "Whether this session represents a physical 20% profit withdrawal sweep."
+        },
+        "isLoss": {
+          "type": "boolean",
+          "description": "Whether this session ended in a planned or controlled scratch loss."
+        },
+        "completedAt": {
+          "type": "string",
+          "description": "ISO timestamp when session was marked completed.",
+          "maxLength": 64
+        },
+        "updatedAt": {
+          "type": "string",
+          "description": "ISO timestamp of last update.",
+          "maxLength": 64
+        }
+      },
+      "required": ["id", "weekId", "dayName", "protocol", "status"]
+    },
+    "TraderProfile": {
+      "title": "TraderProfile",
+      "description": "High level trader profile and active capital metrics.",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Trader profile ID.",
+          "maxLength": 64
+        },
+        "traderName": {
+          "type": "string",
+          "description": "Trader name e.g. Yohannes Sharew.",
+          "maxLength": 100
+        },
+        "seedCapital": {
+          "type": "number",
+          "description": "Starting seed capital in USD."
+        },
+        "currentWorkingEquity": {
+          "type": "number",
+          "description": "Current MT5 retained active equity."
+        },
+        "currentBankedCash": {
+          "type": "number",
+          "description": "Accumulated physical cash banked offline."
+        },
+        "currentTotalNetWorth": {
+          "type": "number",
+          "description": "Total realized net worth."
+        },
+        "devotionGatePassedToday": {
+          "type": "boolean",
+          "description": "Rule 01 spiritual devotion gatekeeper state."
+        },
+        "updatedAt": {
+          "type": "string",
+          "description": "ISO timestamp of last update.",
+          "maxLength": 64
+        }
+      },
+      "required": ["traderName", "seedCapital", "devotionGatePassedToday"]
+    },
+    "DailyJournalNote": {
+      "title": "DailyJournalNote",
+      "description": "Tactile sticky note style trading journal entry for an individual trading session day.",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique note identifier.",
+          "maxLength": 64
+        },
+        "dayId": {
+          "type": "string",
+          "description": "Associated trading day e.g. w01_d1 or date string.",
+          "maxLength": 64
+        },
+        "dayLabel": {
+          "type": "string",
+          "description": "Human readable day label e.g. Week 1 · Day 1 (Mon).",
+          "maxLength": 100
+        },
+        "date": {
+          "type": "string",
+          "description": "Calendar date string YYYY-MM-DD.",
+          "maxLength": 32
+        },
+        "sessionTag": {
+          "type": "string",
+          "description": "Session type e.g. London Open, NY Session, Asian Session, Weekend Review.",
+          "maxLength": 64
+        },
+        "title": {
+          "type": "string",
+          "description": "Brief headline or summary.",
+          "maxLength": 120
+        },
+        "content": {
+          "type": "string",
+          "description": "Detailed text notes of the trading session.",
+          "maxLength": 5000
+        },
+        "color": {
+          "type": "string",
+          "description": "Sticky note color theme.",
+          "enum": ["yellow", "amber", "rose", "emerald", "sky", "purple"]
+        },
+        "outcome": {
+          "type": "string",
+          "description": "Trade session outcome.",
+          "enum": ["win", "loss", "scratch", "observation", "devotion"]
+        },
+        "pnl": {
+          "type": "number",
+          "description": "Realized or recorded session P&L."
+        },
+        "rotation": {
+          "type": "number",
+          "description": "Visual tilt angle in degrees for realistic sticky note appearance."
+        },
+        "createdAt": {
+          "type": "string",
+          "description": "ISO timestamp when note was written.",
+          "maxLength": 64
+        },
+        "updatedAt": {
+          "type": "string",
+          "description": "ISO timestamp of last update.",
+          "maxLength": 64
+        }
+      },
+      "required": ["id", "dayId", "content", "createdAt"]
+    }
+  },
+  "firestore": {
+    "/daily_sessions/{sessionId}": {
+      "schema": "DailySession",
+      "description": "Collection of daily execution sessions and progress control results across all 48 weeks."
+    },
+    "/trader_profile/{profileId}": {
+      "schema": "TraderProfile",
+      "description": "Trader operating profile and master metrics state."
+    },
+    "/daily_journal_notes/{noteId}": {
+      "schema": "DailyJournalNote",
+      "description": "Collection of sticky note daily trading journal entries mapped to specific days."
+    }
+  }
+}

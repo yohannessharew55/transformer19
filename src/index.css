@@ -1,0 +1,252 @@
+@import "tailwindcss";
+
+@variant dark (&:where(.dark, .dark *, .dark-mode, .dark-mode *, [data-theme="dark"], [data-theme="dark"] *));
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 5rem;
+  }
+
+  :root {
+    --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    --font-mono: 'JetBrains Mono', monospace;
+    --bg-main: #fafaf9;
+    --bg-card: #ffffff;
+    --bg-card-subtle: #f5f4ee;
+    --border-card: #e5e3dc;
+    --text-heading: #0f172a;
+    --text-body: #334155;
+    --text-muted: #64748b;
+  }
+
+  .dark, .dark-mode, [data-theme="dark"] {
+    --bg-main: #0b0f17;
+    --bg-card: #121927;
+    --bg-card-subtle: #172033;
+    --border-card: #1e293b;
+    --text-heading: #f8fafc;
+    --text-body: #cbd5e1;
+    --text-muted: #94a3b8;
+  }
+
+  body {
+    font-family: var(--font-sans);
+    min-height: 100vh;
+    background-color: var(--bg-main);
+    color: var(--text-body);
+    transition: background-color 0.25s ease, color 0.25s ease;
+  }
+
+  .dark body, body.dark-mode, [data-theme="dark"] body {
+    background-color: #0b0f17;
+    color: #cbd5e1;
+  }
+}
+
+/* Balanced Night Vision & Day Vision Card System */
+.scandi-card {
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-card);
+  border-radius: 1.25rem;
+  box-shadow: 0 10px 30px -10px rgba(15, 23, 42, 0.05);
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.dark .scandi-card, 
+.dark-mode .scandi-card, 
+[data-theme="dark"] .scandi-card {
+  background-color: #121927 !important;
+  border-color: #1e293b !important;
+  color: #cbd5e1;
+  box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.4);
+}
+
+.scandi-card:hover {
+  box-shadow: 0 20px 40px -12px rgba(15, 23, 42, 0.08);
+  border-color: #d1cfc7;
+}
+
+.dark .scandi-card:hover, 
+.dark-mode .scandi-card:hover, 
+[data-theme="dark"] .scandi-card:hover {
+  border-color: #2e3e57 !important;
+  box-shadow: 0 20px 40px -12px rgba(0, 0, 0, 0.6);
+}
+
+/* Specific prevention of white flash / cards in Night Vision */
+.dark .bg-white,
+.dark-mode .bg-white,
+[data-theme="dark"] .bg-white {
+  background-color: #121927 !important;
+  border-color: #1e293b !important;
+  color: #cbd5e1 !important;
+}
+
+/* Invert buttons that should not be white in dark mode */
+.dark .bg-white.text-slate-900,
+.dark-mode .bg-white.text-slate-900,
+[data-theme="dark"] .bg-white.text-slate-900 {
+  color: #f8fafc !important;
+}
+
+/* Shelf Display & Sub-surfaces */
+.shelf-display {
+  background: var(--bg-card-subtle);
+  border: 1px solid var(--border-card);
+  border-radius: 1rem;
+}
+
+.dark .shelf-display, .dark-mode .shelf-display, [data-theme="dark"] .shelf-display {
+  background: #172033 !important;
+  border-color: #1e293b !important;
+}
+
+/* Dark Contrast Panel in light, perfectly calibrated in dark */
+.scandi-dark-panel {
+  background: #0f172a;
+  color: #f8fafc;
+  border-radius: 1.5rem;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.4);
+}
+
+.dark .scandi-dark-panel, .dark-mode .scandi-dark-panel, [data-theme="dark"] .scandi-dark-panel {
+  background: #131b2c;
+  border-color: #1f2a3f;
+  box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.6);
+}
+
+/* Terracotta Pill Buttons */
+.btn-terracotta {
+  background: #e07a5f;
+  color: #ffffff;
+  border-radius: 9999px;
+  font-weight: 700;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 14px rgba(224, 122, 95, 0.3);
+}
+
+.btn-terracotta:hover {
+  background: #d46b50;
+  box-shadow: 0 6px 20px rgba(224, 122, 95, 0.45);
+  transform: translateY(-1px);
+}
+
+.badge-terracotta {
+  background: rgba(224, 122, 95, 0.12);
+  color: #e07a5f;
+  border: 1px solid rgba(224, 122, 95, 0.25);
+  border-radius: 9999px;
+}
+
+.dark .badge-terracotta, .dark-mode .badge-terracotta, [data-theme="dark"] .badge-terracotta {
+  background: rgba(224, 122, 95, 0.18);
+  color: #f4a261;
+  border-color: rgba(244, 162, 97, 0.3);
+}
+
+/* Print optimizations for 48-Week Cockpit Progress Report */
+@media print {
+  @page {
+    size: A4 portrait;
+    margin: 10mm 10mm 12mm 10mm;
+  }
+
+  header, nav, .print-hide, .print\:hidden, button, [role="dialog"], .tri-chat-dock, .fixed {
+    display: none !important;
+  }
+
+  body {
+    background: #ffffff !important;
+    color: #0f172a !important;
+    padding: 0 !important;
+    font-size: 10pt !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  .print-only {
+    display: block !important;
+  }
+
+  .print-avoid-break {
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+  }
+
+  /* Force crisp light backgrounds on printed cards */
+  .scandi-card, .bg-white, .dark .bg-white, .dark .scandi-card, .shelf-display {
+    background: #ffffff !important;
+    color: #0f172a !important;
+    border: 1px solid #cbd5e1 !important;
+    box-shadow: none !important;
+  }
+
+  .dark .text-white, .text-white {
+    color: #0f172a !important;
+  }
+
+  /* Force table cells and text to be legible */
+  * {
+    text-shadow: none !important;
+  }
+}
+
+.print-only {
+  display: none;
+}
+
+/* Human Handwriting & Sticky Note Typography */
+.font-handwriting,
+.font-human {
+  font-family: 'Caveat', 'Kalam', 'Segoe Print', cursive, sans-serif;
+  letter-spacing: 0.015em;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(148, 163, 184, 0.3);
+  border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(148, 163, 184, 0.5);
+}
+
+/* Utility to hide scrollbars cleanly on mobile and touch carousels */
+.scrollbar-none {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.scrollbar-none::-webkit-scrollbar {
+  display: none;
+}
+
+/* iOS Native & PWA Safe Area Support (Notches, Dynamic Island, Home Bar) */
+:root {
+  --sat: env(safe-area-inset-top, 0px);
+  --sab: env(safe-area-inset-bottom, 0px);
+  --sal: env(safe-area-inset-left, 0px);
+  --sar: env(safe-area-inset-right, 0px);
+}
+
+body {
+  padding-bottom: var(--sab);
+  -webkit-touch-callout: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* iOS smooth momentum scrolling */
+* {
+  -webkit-overflow-scrolling: touch;
+}

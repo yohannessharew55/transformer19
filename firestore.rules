@@ -1,0 +1,70 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // 1. Global Default Deny Catch-All
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // Helper functions
+    function isValidId(id) {
+      return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    function incoming() {
+      return request.resource.data;
+    }
+
+    function isValidSession(data) {
+      return data.id is string && data.id.size() <= 64 &&
+        data.weekId is string && data.weekId.size() <= 32 &&
+        data.dayName is string && data.dayName.size() <= 64 &&
+        data.protocol is string && data.protocol.size() <= 200 &&
+        data.status is string && (data.status == 'pending' || data.status == 'completed' || data.status == 'skipped') &&
+        (!('notes' in data) || (data.notes is string && data.notes.size() <= 2000)) &&
+        (!('actualPnl' in data) || (data.actualPnl is number));
+    }
+
+    function isValidProfile(data) {
+      return data.traderName is string && data.traderName.size() <= 100 &&
+        data.seedCapital is number &&
+        data.devotionGatePassedToday is bool;
+    }
+
+    function isValidJournalNote(data) {
+      return data.id is string && data.id.size() <= 64 &&
+        data.dayId is string && data.dayId.size() <= 64 &&
+        data.content is string && data.content.size() <= 5000 &&
+        data.createdAt is string && data.createdAt.size() <= 64 &&
+        (!('dayLabel' in data) || (data.dayLabel is string && data.dayLabel.size() <= 100)) &&
+        (!('date' in data) || (data.date is string && data.date.size() <= 32)) &&
+        (!('title' in data) || (data.title is string && data.title.size() <= 120)) &&
+        (!('sessionTag' in data) || (data.sessionTag is string && data.sessionTag.size() <= 64)) &&
+        (!('color' in data) || (data.color is string && data.color.size() <= 32)) &&
+        (!('outcome' in data) || (data.outcome is string && data.outcome.size() <= 32)) &&
+        (!('pnl' in data) || (data.pnl is number)) &&
+        (!('rotation' in data) || (data.rotation is number));
+    }
+
+    // Daily Sessions Collection
+    match /daily_sessions/{sessionId} {
+      allow read: if true;
+      allow create, update: if isValidId(sessionId) && isValidSession(incoming());
+      allow delete: if isValidId(sessionId);
+    }
+
+    // Trader Profile Collection
+    match /trader_profile/{profileId} {
+      allow read: if true;
+      allow create, update: if isValidId(profileId) && isValidProfile(incoming());
+      allow delete: if false;
+    }
+
+    // Daily Journal Sticky Notes Collection
+    match /daily_journal_notes/{noteId} {
+      allow read: if true;
+      allow create, update: if isValidId(noteId) && isValidJournalNote(incoming());
+      allow delete: if isValidId(noteId);
+    }
+  }
+}

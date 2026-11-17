@@ -1,0 +1,29 @@
+{
+  "short_name": "Transformer19",
+  "name": "Transformer19 Trading Cockpit",
+  "description": "Transformer19 Trading Execution Cockpit & 48-Week Compounding Roadmap",
+  "icons": [
+    {
+      "src": "/icon-192.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "/icon-512.png",
+      "type": "image/png",
+      "sizes": "512x512",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/apple-touch-icon.png",
+      "type": "image/png",
+      "sizes": "180x180"
+    }
+  ],
+  "start_url": "/",
+  "background_color": "#0b0f17",
+  "theme_color": "#0b0f17",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "scope": "/"
+}

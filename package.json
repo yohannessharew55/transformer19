@@ -1,0 +1,78 @@
+{
+  "name": "transformer19-cockpit",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Transformer19 - 100K Trading Execution Cockpit & 48-Week Compounding Roadmap",
+  "type": "module",
+  "main": "electron/main.cjs",
+  "scripts": {
+    "dev": "tsx server.ts",
+    "build": "vite build && esbuild api/entry.ts --bundle --platform=node --format=esm --packages=external --outfile=api/index.js",
+    "start": "tsx server.ts",
+    "preview": "vite preview",
+    "lint": "tsc --noEmit",
+    "electron": "electron electron/main.cjs",
+    "electron:dev": "electron electron/main.cjs",
+    "dist": "electron-builder --win --x64",
+    "ios:build": "npm run build && npx cap sync ios",
+    "ios:sync": "npx cap sync ios",
+    "ios:open": "npx cap open ios"
+  },
+  "build": {
+    "appId": "com.transformer19.cockpit",
+    "productName": "Transformer19 Trading Cockpit",
+    "copyright": "Copyright © 2026 Transformer19",
+    "directories": {
+      "output": "release"
+    },
+    "win": {
+      "target": [
+        "nsis",
+        "portable"
+      ]
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "Transformer19 Trading Cockpit"
+    }
+  },
+  "dependencies": {
+    "@capacitor/cli": "^8.6.0",
+    "@capacitor/core": "^8.6.0",
+    "@capacitor/ios": "^8.6.0",
+    "@google/genai": "^2.4.0",
+    "@libsql/client": "^0.18.0",
+    "@supabase/supabase-js": "^2.117.2",
+    "@tailwindcss/vite": "^4.3.3",
+    "@vercel/blob": "^2.8.2",
+    "@vitejs/plugin-react": "^6.1.1",
+    "chart.js": "^4.5.1",
+    "dotenv": "^17.2.3",
+    "drizzle-kit": "^0.31.11",
+    "drizzle-orm": "^0.45.3",
+    "express": "^4.21.2",
+    "firebase": "^12.19.0",
+    "firebase-admin": "^14.5.0",
+    "lucide-react": "^0.546.0",
+    "motion": "^12.23.24",
+    "react": "^19.0.1",
+    "react-chartjs-2": "^5.3.1",
+    "react-dom": "^19.0.1",
+    "vite": "^8.3.0"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.21",
+    "@types/node": "^22.14.0",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "cross-env": "^10.1.0",
+    "electron": "^45.2.3",
+    "electron-builder": "^26.18.0",
+    "tailwindcss": "^4.3.3",
+    "tsx": "^4.21.0",
+    "wait-on": "^9.5.1"
+  }
+}
